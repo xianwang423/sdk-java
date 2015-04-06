@@ -23,7 +23,7 @@ import net.authorize.api.controller.CreateTransactionController;
 import net.authorize.api.controller.base.ApiOperationBase;
 import net.authorize.api.controller.test.ApiCoreTestBase;
 
-public class CreateCustomerProfileFromTransactionTest  extends ApiCoreTestBase {
+public class CreateCustomerProfileFromTransactionTest extends ApiCoreTestBase {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -44,51 +44,54 @@ public class CreateCustomerProfileFromTransactionTest  extends ApiCoreTestBase {
 	public void tearDown() throws Exception {
 		super.tearDown();
 	}
-	
+
 	@Test
-	public void createCustomerProfileFromTransactionSample()
-	{
-		//Common code to set for all requests
+	public void createCustomerProfileFromTransactionSample() {
+		// Common code to set for all requests
 		ApiOperationBase.setEnvironment(environment);
 		ApiOperationBase.setMerchantAuthentication(merchantAuthenticationType);
-		
+
 		CreateCustomerProfileFromTransactionRequest request = new CreateCustomerProfileFromTransactionRequest();
 		request.setTransId(createTransactionAndReturnId());
-		CreateCustomerProfileFromTransactionConroller createProfileController = new CreateCustomerProfileFromTransactionConroller(request);
+		CreateCustomerProfileFromTransactionConroller createProfileController = new CreateCustomerProfileFromTransactionConroller(
+				request);
 		createProfileController.execute();
-		CreateCustomerProfileResponse response = createProfileController.getApiResponse();
-		
+		CreateCustomerProfileResponse response = createProfileController
+				.getApiResponse();
+
 		Assert.assertNotNull(response);
-		Assert.assertEquals(MessageTypeEnum.OK, response.getMessages().getResultCode());
-		Assert.assertFalse(response.getCustomerProfileId().isEmpty());		
+		Assert.assertEquals(MessageTypeEnum.OK, response.getMessages()
+				.getResultCode());
+		Assert.assertFalse(response.getCustomerProfileId().isEmpty());
 	}
-	
-	private String createTransactionAndReturnId()
-	{		
+
+	private String createTransactionAndReturnId() {
 		CreditCardType creditCard = new CreditCardType();
 		creditCard.setCardNumber("4111111111111111");
-	    creditCard.setExpirationDate("0616");
-				
+		creditCard.setExpirationDate("0616");
+
 		PaymentType paymentType = new PaymentType();
 		paymentType.setCreditCard(creditCard);
-				
+
 		TransactionRequestType requestInternal = new TransactionRequestType();
 		requestInternal.setTransactionType("authOnlyTransaction");
 		requestInternal.setPayment(paymentType);
-		requestInternal.setAmount(new BigDecimal(System.currentTimeMillis() % 100));
-		
+		requestInternal.setAmount(setValidTransactionAmount(System
+				.currentTimeMillis()));
+
 		CustomerDataType customer = new CustomerDataType();
-		customer.setEmail(System.currentTimeMillis()+"@b.bla");
+		customer.setEmail(System.currentTimeMillis() + "@b.bla");
 		requestInternal.setCustomer(customer);
-				
+
 		CreateTransactionRequest request = new CreateTransactionRequest();
 		request.setTransactionRequest(requestInternal);
-				
-		CreateTransactionController controller = new CreateTransactionController(request);
+
+		CreateTransactionController controller = new CreateTransactionController(
+				request);
 		controller.execute();
-				
+
 		CreateTransactionResponse response = controller.getApiResponse();
-				
+
 		return response.getTransactionResponse().getTransId();
 	}
 }
