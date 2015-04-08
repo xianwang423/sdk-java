@@ -27,9 +27,9 @@ public class ReportingTest extends UnitTestData {
 		List<BatchDetails> batchDetailsList = getSettledBatchDetailsList();
 
 		Assert.assertNotNull(batchDetailsList);
-		Assert.assertTrue(batchDetailsList.size() >= 0); /*- 0 is valid; better not */
+		Assert.assertTrue(batchDetailsList.size() > 0);
 
-		for (BatchDetails batchDetail : batchDetailsList) {
+		for(BatchDetails batchDetail : batchDetailsList) {
 			Assert.assertNotNull(batchDetail.getBatchId());
 			Assert.assertNotNull(batchDetail.getSettlementState());
 			Assert.assertNotNull(batchDetail.getSettlementTimeLocal());
@@ -37,9 +37,8 @@ public class ReportingTest extends UnitTestData {
 			Assert.assertNotNull(batchDetail.getPaymentMethod());
 			Assert.assertNotNull(batchDetail.getMarketType());
 			Assert.assertNotNull(batchDetail.getProduct());
-
-			for (BatchStatistics batchStat : batchDetail
-					.getBatchStatisticsList()) {
+			
+			for(BatchStatistics batchStat :batchDetail.getBatchStatisticsList()) {
 				Assert.assertNotNull(batchStat.getAccountType());
 				Assert.assertNotNull(batchStat.getChargeAmount());
 				Assert.assertNotNull(batchStat.getChargebackAmount());
@@ -69,35 +68,29 @@ public class ReportingTest extends UnitTestData {
 	public void getSettledBatchListRequestWithTimeLive() {
 
 		// batch list request
-		net.authorize.reporting.Transaction transaction = merchant
-				.createReportingTransaction(TransactionType.GET_SETTLED_BATCH_LIST);
-		ReportingDetails reportingDetails = ReportingDetails
-				.createReportingDetails();
+		net.authorize.reporting.Transaction transaction =
+		  merchant.createReportingTransaction(TransactionType.GET_SETTLED_BATCH_LIST);
+		ReportingDetails reportingDetails = ReportingDetails.createReportingDetails();
 
 		Calendar firstSettlementCal = Calendar.getInstance();
 		firstSettlementCal.add(Calendar.DAY_OF_YEAR, -30);
-		reportingDetails.setBatchFirstSettlementDate(firstSettlementCal
-				.getTime());
-
+		reportingDetails.setBatchFirstSettlementDate(firstSettlementCal.getTime());
+		
 		Calendar lastSettlementCal = Calendar.getInstance();
-		// lastSettlementCal.add(Calendar.DAY_OF_YEAR, +25);
-		reportingDetails
-				.setBatchLastSettlementDate(lastSettlementCal.getTime());
+		//lastSettlementCal.add(Calendar.DAY_OF_YEAR, +25);
+		reportingDetails.setBatchLastSettlementDate(lastSettlementCal.getTime());
 
 		reportingDetails.setBatchIncludeStatistics(true);
 		transaction.setReportingDetails(reportingDetails);
 
-		Result<Transaction> result = (Result<Transaction>) merchant
-				.postTransaction(transaction);
+		Result<Transaction> result = (Result<Transaction>)merchant.postTransaction(transaction);
 
 		Assert.assertNotNull(result);
 		result.printMessages();
 		Assert.assertTrue(result.isOk());
 		Assert.assertNotNull(result.getReportingDetails().getBatchDetailsList());
-		Assert.assertTrue(result.getReportingDetails().getBatchDetailsList()
-				.size() > 0);
-		for (BatchDetails batchDetail : result.getReportingDetails()
-				.getBatchDetailsList()) {
+		Assert.assertTrue(result.getReportingDetails().getBatchDetailsList().size() > 0);
+		for(BatchDetails batchDetail : result.getReportingDetails().getBatchDetailsList()) {
 			Assert.assertNotNull(batchDetail.getBatchId());
 			Assert.assertNotNull(batchDetail.getSettlementState());
 			Assert.assertNotNull(batchDetail.getSettlementTimeLocal());
@@ -105,9 +98,8 @@ public class ReportingTest extends UnitTestData {
 			Assert.assertNotNull(batchDetail.getPaymentMethod());
 			Assert.assertNotNull(batchDetail.getMarketType());
 			Assert.assertNotNull(batchDetail.getProduct());
-
-			for (BatchStatistics batchStat : batchDetail
-					.getBatchStatisticsList()) {
+			
+			for(BatchStatistics batchStat :batchDetail.getBatchStatisticsList()) {
 				Assert.assertNotNull(batchStat.getAccountType());
 				Assert.assertNotNull(batchStat.getChargeAmount());
 				Assert.assertNotNull(batchStat.getChargebackAmount());
@@ -169,8 +161,7 @@ public class ReportingTest extends UnitTestData {
 		Assert.assertTrue(result.getReportingDetails()
 				.getTransactionDetailList().size() > 0);
 
-		for (TransactionDetails transactionDetail : result
-				.getReportingDetails().getTransactionDetailList()) {
+		for(TransactionDetails transactionDetail : result.getReportingDetails().getTransactionDetailList()) {
 			Assert.assertNotNull(transactionDetail.getAccountNumber());
 			Assert.assertNotNull(transactionDetail.getTransId());
 			Assert.assertNotNull(transactionDetail.getAccountType());
@@ -199,7 +190,7 @@ public class ReportingTest extends UnitTestData {
 		Assert.assertNotNull(transactionDetails);
 		Assert.assertTrue(transactionDetails.size() >= 0); /*- 0 is valid; better not. */
 
-		for (TransactionDetails transactionDetail : transactionDetails) {
+		for(TransactionDetails transactionDetail : transactionDetails) {
 			Assert.assertNotNull(transactionDetail.getAccountNumber());
 			Assert.assertNotNull(transactionDetail.getTransId());
 			Assert.assertNotNull(transactionDetail.getAccountType());
@@ -219,6 +210,7 @@ public class ReportingTest extends UnitTestData {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void getTransactionDetailsRequestLive() {
+
 
 		/*-
 		 * Precondition: there are unsettled transactions in the AuthorizeNet

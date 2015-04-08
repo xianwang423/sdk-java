@@ -7,6 +7,7 @@ import net.authorize.UnitTestData;
 
 import org.junit.Test;
 
+
 public class FingerprintTest extends UnitTestData {
 
 	@Test

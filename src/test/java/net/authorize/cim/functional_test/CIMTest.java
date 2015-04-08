@@ -370,7 +370,7 @@ public class CIMTest extends UnitTestData {
 
 		String cardCode = "";
 		MyReturnValuesTest returnValues = createCustomerProfileWithAuthOnly(customerProfile, paymentProfileCC, ValidationModeType.TEST_MODE, cardCode);
-		    
+		
 		// Create a capture only txn request
 		net.authorize.cim.Transaction transaction = merchant.createCIMTransaction(TransactionType.CREATE_CUSTOMER_PROFILE_TRANSACTION);
 		transaction.setRefId(refId);
